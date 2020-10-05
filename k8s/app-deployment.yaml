@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment 
+metadata:
+  name: app-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels: 
+      component: app
+  template:
+    metadata:
+      labels:
+        component: app
+    spec:
+      containers:
+        - image:  dipsprajapati/serviantechchallenge-app
+          name: app
+          args: ["serve"]
+          ports:
+            - containerPort: 3000
+          env:
+            - name: DbUser
+              value: postgres
+            - name: DbName
+              value: app
+            - name: DbPort 
+              value: '5432'
+            - name: DbHost 
+              value: postgres-cluster-ip-service
+            - name: DbPassword
+              valueFrom:
+                secretKeyRef:
+                  name: pgpassword
+                  key: DbPassword
+
+
+
+

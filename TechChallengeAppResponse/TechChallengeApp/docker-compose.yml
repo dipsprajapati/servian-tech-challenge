@@ -1,0 +1,27 @@
+version: "3"
+services:
+  db:
+    image: "postgres"
+    environment:
+      - POSTGRES_DB=app
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=changeme
+    # ports:
+    #   - 5432:5432
+    networks:
+      - net
+  app:
+    restart: "always" 
+    build: .
+    command: ["serve"]
+    volumes:
+      - .:/go/src/app
+    ports:
+      - "3000:3000"
+    networks:
+      - net
+
+networks:
+  net:
+
+
