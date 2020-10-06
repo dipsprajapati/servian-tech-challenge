@@ -1,6 +1,6 @@
 docker build -t dipsprajapati/serviantechchallenge-app:latest -t dipsprajapati/serviantechchallenge-app:$SHA -f ./TechChallengeAppResponse/TechChallengeApp/Dockerfile ./TechChallengeAppResponse/TechChallengeApp
 
-docker push stephengrider/multi-client:latest
+docker push stephengrider/serviantechchallenge-app:latest
 
 docker push dipsprajapati/serviantechchallenge-app:$SHA
 
