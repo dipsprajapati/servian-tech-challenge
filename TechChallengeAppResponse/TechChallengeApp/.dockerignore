@@ -1,3 +1,17 @@
 /vendor
 /.git
 /dist
+Dockerfile
+.dockerignore
+.git
+# terraform files
+# Platform-specific plugins initialized on `terraform init`.
+.terraform/
+
+# Secret keys accessible through `${var.*}`.
+*.tfvars
+
+# Local state unless a remote bucket is used.
+*.tfstate
+*.tfstate.*
+plan.*
