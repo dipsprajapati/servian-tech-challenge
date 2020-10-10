@@ -1,0 +1,82 @@
+version: 2.1
+jobs:
+  gke_create_cluster:
+    docker: 
+      - image: ariv3ra/terraform-gcp:latest
+    environment:
+      CLOUDSDK_CORE_PROJECT: servian-tech-challenge
+    steps:
+      - checkout
+      - run:
+          name: Create GKE cluster
+          command: |
+            echo $TF_CLOUD_TOKEN | base64 -d > $HOME/.terraformrc
+            echo $GOOGLE_CLOUD_KEYS | base64 -d > $HOME/gcloud_keys.json
+            gcloud auth activate-service-account --key-file=${HOME}/gcloud_keys.json
+            cd part03/iac_gke_cluster/
+            terraform init
+            terraform plan -var credentials=$HOME/gcloud_keys.json -out=plan.txt
+            terraform apply plan.txt
+            
+
+  # gke_deploy_app:
+  #   docker: 
+  #     - image: circleci/node:12
+  #   environment:
+  #     CLOUDSDK_CORE_PROJECT: servian-tech-challenge
+  #     CLOUDSDK_CORE_DISABLE_PROMPTS: 1
+  #   steps:
+  #     - checkout
+  #     - run:
+  #         name: Deploy app on GKE
+  #         command: |
+  #           echo $GOOGLE_CLOUD_KEYS | base64 -d > $HOME/gcloud_keys.json
+  #           curl https://sdk.cloud.google.com | bash > /dev/null;
+  #           source $HOME/google-cloud-sdk/path.bash.inc
+  #           gcloud components update kubectl
+  #           gcloud auth activate-service-account --key-file=${HOME}/gcloud_keys.json
+  #           gcloud config set project servian-tech-challenge
+  #           gcloud config set compute/zone us-central1-a
+  #           gcloud container clusters get-credentials servian-app-v2
+  #           echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin            # bash ./deploy.sh
+
+  gke_deploy_app:
+    environment:
+      CLOUDSDK_CORE_PROJECT: servian-tech-challenge
+      CLOUDSDK_CORE_DISABLE_PROMPTS: 1
+    machine: true
+    steps:
+      - checkout
+      - run:
+          name: Deploy app on GKE
+          command: |
+            docker logout
+            echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin
+            echo $GOOGLE_CLOUD_KEYS | base64 -d > $HOME/gcloud_keys.json
+            curl https://sdk.cloud.google.com | bash > /dev/null;
+            source $HOME/google-cloud-sdk/path.bash.inc
+            gcloud components update kubectl
+            gcloud auth activate-service-account --key-file=${HOME}/gcloud_keys.json
+            gcloud config set project servian-tech-challenge
+            gcloud config set compute/zone us-central1-a
+            gcloud container clusters get-credentials servian-app-v2
+            gcloud container clusters upgrade servian-app-v2 --master
+            # sudo ./deploy.sh
+            docker build -t dipsprajapati/serviantechchallenge-app:latest -f ./TechChallengeAppResponse/TechChallengeApp/Dockerfile ./TechChallengeAppResponse/TechChallengeApp
+            docker push dipsprajapati/serviantechchallenge-app:latest
+            kubectl apply -f k8s
+            kubectl set image deployments/app-deployment app=dipsprajapati/serviantechchallenge-app:latestls
+            # curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
+            # chmod 700 get_helm.sh
+            # ./get_helm.sh
+            # helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+            # helm install my-release ingress-nginx/ingress-nginx
+
+workflows:
+  build_test:
+    jobs:
+      - gke_create_cluster
+      - gke_deploy_app:
+          requires:
+            - gke_create_cluster
+
