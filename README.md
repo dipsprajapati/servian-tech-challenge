@@ -1,4 +1,4 @@
-#Summary
+# Summary
 
 This repository consists different tech stacks to create infra on GKE and then deploying app.
 The CI/CD principles are followed for the development. It consists of following tech stacks.
@@ -9,14 +9,14 @@ The CI/CD principles are followed for the development. It consists of following 
 4. Nginx - Proxy for app
 5. Postgrseql - Backend database
 
-#Requirements
+# Requirements
 
 1. Terraform 0.13.3
 2. Circle CI account
 3. Google Cloud Project with Service account with the Editor permission
 4. Git
 
-#Installation
+# Installation
 
 1. Clone the git repo: https://github.com/dipsprajapati/servian-tech-challenge.git
 2. Modify the iac_gke_cluster/variables.tf
