@@ -4,17 +4,17 @@ This repository consists different tech stacks to create infra on GKE and then d
 The CI/CD principles are followed for the development. It consists of following tech stacks.
 
 1. Terraform - Provision Kubernetes cluster on GKE
-2. Circle CI - CI/CD deployment
+2. CircleCI - CI/CD deployment
 3. Docker - Conterization
 4. Nginx - Proxy for app
-5. Postgrseql - Backend database
+5. Postgresql - Backend database
 
 # Requirements
 
 1. Terraform 0.13.3
 2. Terraform cloud account. You will need API token to configure in the Circle CI project 
    enviornment variables
-3. Circle CI account
+3. CircleCI account
 4. Google Cloud Project with Service account with the Editor permission
 5. Git
 
@@ -22,8 +22,8 @@ The CI/CD principles are followed for the development. It consists of following 
 
 1. Clone the git repo: https://github.com/dipsprajapati/servian-tech-challenge.git
 2. Modify the iac_gke_cluster/variables.tf
-3. Configure the CIrcle CI to build the project from your repo
-4. Create following ENV variables in the circleCI's project settings
+3. Configure the CircleCI to build the project from your repo
+4. Create following ENV variables in the CircleCI's project settings
     - EnVar Name: TF_CLOUD_TOKEN - Value: The Base64 encoded value of the local .terraformrc file  which
       hosts the Terraform Cloud user token
     - EnVar Name: DOCKER_LOGIN - Value: Docker Hub username
