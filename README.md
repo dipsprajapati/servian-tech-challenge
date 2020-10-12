@@ -3,8 +3,8 @@
 This repository consists different tech stacks to create infra on GKE and then deploying app.
 The CI/CD principles are followed for the development. It consists of following tech stacks.
 
-1. Terraform - Builds Kubernetes cluster on GKE
-2. Circle CI - CI/CD deplyment
+1. Terraform - Provision Kubernetes cluster on GKE
+2. Circle CI - CI/CD deployment
 3. Docker - Conterization
 4. Nginx - Proxy for app
 5. Postgrseql - Backend database
@@ -12,9 +12,11 @@ The CI/CD principles are followed for the development. It consists of following 
 # Requirements
 
 1. Terraform 0.13.3
-2. Circle CI account
-3. Google Cloud Project with Service account with the Editor permission
-4. Git
+2. Terraform cloud account. You will need API token to configure in the Circle CI project 
+   enviornment variables
+3. Circle CI account
+4. Google Cloud Project with Service account with the Editor permission
+5. Git
 
 # Installation
 
